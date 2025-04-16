@@ -1,0 +1,84 @@
+﻿@page "{id:int}"
+@model TimeCardSystem.API.Pages.Schedule.EditModel
+
+@{
+    ViewData["Title"] = "Edit Schedule";
+    ViewData["ActivePage"] = "Schedule";
+    Layout = "_TimeEntriesLayout";
+}
+
+<div class="edit-schedule-container">
+    <h2>Edit Schedule</h2>
+
+    <div class="employee-info">
+        <i class="fas fa-user"></i> <span>@Model.EmployeeName</span>
+    </div>
+
+    @if (!ModelState.IsValid)
+    {
+        <div class="validation-error">
+            <ul>
+                @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <form method="post" class="edit-schedule-form">
+        <input type="hidden" asp-for="ScheduleId" />
+
+        <div class="form-row">
+            <div class="form-group">
+                <label asp-for="ScheduleUpdate.ShiftStart">Shift Start</label>
+                <input asp-for="ScheduleUpdate.ShiftStart" type="datetime-local" class="form-control" id="editShiftStartInput" required />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ScheduleUpdate.LunchOption">Lunch Break</label>
+                <select asp-for="ScheduleUpdate.LunchOption" class="form-control" id="editLunchOptionSelect">
+                    <option value="None">No Lunch Break</option>
+                    <option value="30">30 Minutes</option>
+                    <option value="60">1 Hour</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label asp-for="ScheduleUpdate.ShiftEnd">Shift End</label>
+                <input asp-for="ScheduleUpdate.ShiftEnd" type="datetime-local" class="form-control" id="editShiftEndInput" required />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ScheduleUpdate.Location">Location</label>
+                <input asp-for="ScheduleUpdate.Location" class="form-control" placeholder="Location" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ScheduleUpdate.Status">Status</label>
+            <select asp-for="ScheduleUpdate.Status" class="form-control">
+                <option value="@ScheduleStatus.Pending">Pending</option>
+                <option value="@ScheduleStatus.Published">Published</option>
+                <option value="@ScheduleStatus.Cancelled">Cancelled</option>
+                <option value="@ScheduleStatus.Completed">Completed</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ScheduleUpdate.Notes">Notes (Optional)</label>
+            <textarea asp-for="ScheduleUpdate.Notes" class="form-control" rows="3" placeholder="Add any notes about this shift"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <a href="/Schedule/Manage?weekStart=@Model.OriginalShiftStart.ToString("yyyy-MM-dd")" class="btn-secondary">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </form>
+</div>

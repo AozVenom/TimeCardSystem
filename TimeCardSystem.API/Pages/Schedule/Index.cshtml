@@ -1,0 +1,78 @@
+﻿@page
+@model TimeCardSystem.API.Pages.Schedule.IndexModel
+@{
+    ViewData["Title"] = "Schedules";
+    ViewData["ActivePage"] = "Schedule";
+    Layout = "_TimeEntriesLayout";
+}
+
+<header>
+    <div class="user-info">
+        <h2>Employee Schedules</h2>
+        <p>@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</p>
+    </div>
+</header>
+
+<div class="container-content">
+    <div class="mb-3">
+        <a asp-page="/Schedule/Create" class="btn btn-primary">Create New Schedule</a>
+    </div>
+
+    <form method="get" class="mb-3">
+        <div class="row">
+            <div class="col-md-3">
+                <select asp-for="SearchViewModel.EmployeeId"
+                        asp-items="Model.Employees"
+                        class="form-control">
+                    <option value="">All Employees</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input asp-for="SearchViewModel.StartDate" type="date" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <input asp-for="SearchViewModel.EndDate" type="date" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Employee</th>
+                <th>Shift Start</th>
+                <th>Shift End</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var schedule in Model.Schedules)
+            {
+                <tr>
+                    <td>@schedule.EmployeeName</td>
+                    <td>@schedule.ShiftStart.ToString("g")</td>
+                    <td>@schedule.ShiftEnd.ToString("g")</td>
+                    <td>@schedule.Location</td>
+                    <td>
+                        <span class="status-badge status-@schedule.Status.ToString().ToLower()">
+                            @schedule.Status
+                        </span>
+                    </td>
+                    <td>
+                        <a asp-page="/Schedule/Edit" asp-route-id="@schedule.Id" class="btn btn-sm btn-warning">Edit</a>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Schedules.Any())
+            {
+                <tr>
+                    <td colspan="6" class="text-center">No schedules found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>

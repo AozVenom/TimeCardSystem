@@ -1,0 +1,362 @@
+﻿/* pages/dashboard-page.css */
+
+/* New dashboard layout */
+.dashboard-new-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Clock in/out section */
+.clock-section {
+    background-color: white;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.user-profile-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+/* Digital clock styles */
+.digital-clock-container {
+    width: 300px;
+    height: 150px;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 2px solid #334155;
+}
+
+.digital-clock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+}
+
+.clock-time-wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+#clock-time {
+    font-size: 5.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    line-height: 1;
+}
+
+#clock-ampm {
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-left: 3px;
+    margin-top: 2px;
+    color: #60a5fa;
+}
+
+#clock-date {
+    font-size: 0.7rem;
+    opacity: 0.8;
+    letter-spacing: 0.5px;
+}
+
+.profile-info h3 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    color: var(--color-text-dark);
+}
+
+.profile-info p {
+    margin: 5px 0 0;
+    color: var(--color-text-light);
+    font-size: var(--font-size-sm);
+}
+
+.clock-action {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.clock-status {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius-md);
+}
+
+    .clock-status.active {
+        background-color: rgba(16, 185, 129, 0.1);
+    }
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #aaa;
+}
+
+    .status-indicator.offline {
+        background-color: #aaa;
+    }
+
+.clock-status.active .status-indicator {
+    background-color: var(--color-success);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+}
+
+.status-text {
+    display: flex;
+    flex-direction: column;
+}
+
+    .status-text span {
+        color: var(--color-text-dark);
+    }
+
+    .status-text .timestamp {
+        font-size: var(--font-size-sm);
+        color: var(--color-text-light);
+    }
+
+.btn-clock {
+    padding: 18px;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-clock-in {
+    background-color: var(--color-success);
+    color: white;
+}
+
+    .btn-clock-in:hover {
+        background-color: #059669;
+    }
+
+.btn-clock-out {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+    .btn-clock-out:hover {
+        background-color: #dc2626;
+    }
+
+/* Weekly hours section */
+.weekly-hours-section {
+    background-color: white;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-xl);
+}
+
+    .weekly-hours-section h3 {
+        margin-top: 0;
+        margin-bottom: var(--spacing-md);
+        color: var(--color-text-dark);
+        font-size: var(--font-size-lg);
+    }
+
+.week-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-sm) 0;
+    font-weight: 500;
+    color: var(--color-text-dark);
+}
+
+.btn-week-nav {
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    cursor: pointer;
+    font-size: var(--font-size-md);
+    padding: var(--spacing-xs);
+    transition: color 0.2s;
+}
+
+    .btn-week-nav:hover {
+        color: var(--color-primary-dark);
+    }
+
+.weekly-hours-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.day-card {
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-sm);
+    text-align: center;
+    transition: all 0.2s;
+    border: 1px solid var(--color-border);
+}
+
+    .day-card.today {
+        background-color: var(--color-primary);
+        color: white;
+        box-shadow: var(--shadow-sm);
+    }
+
+.day-name {
+    font-weight: 600;
+    font-size: var(--font-size-md);
+}
+
+.day-hours {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 5px 0;
+}
+
+.day-details {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-light);
+}
+
+.day-card.today .day-details {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.hours-summary {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-md);
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius-md);
+}
+
+.hours-total, .hours-target {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hours-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-dark);
+}
+
+/* Recent activity */
+.recent-activity {
+    background-color: white;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+}
+
+    .recent-activity h3 {
+        margin-top: 0;
+        margin-bottom: var(--spacing-md);
+        color: var(--color-text-dark);
+        font-size: var(--font-size-lg);
+    }
+
+.activity-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--spacing-md);
+}
+
+    .activity-table th,
+    .activity-table td {
+        padding: var(--spacing-sm) var(--spacing-md);
+        border-bottom: 1px solid var(--color-border);
+        text-align: left;
+    }
+
+    .activity-table th {
+        font-weight: 600;
+        color: var(--color-text-dark);
+    }
+
+.view-all-link {
+    text-align: right;
+}
+
+    .view-all-link a {
+        color: var(--color-primary);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+        .view-all-link a:hover {
+            color: var(--color-primary-dark);
+        }
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .dashboard-new-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .weekly-hours-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .day-card:nth-child(n+5) {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .weekly-hours-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .day-card:nth-child(n+4) {
+        display: none;
+    }
+
+    .hours-summary {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+}

@@ -1,0 +1,36 @@
+﻿
+.sidebar {
+    width: 250px;
+    background-color: var(--color-background-dark);
+    color: white;
+    padding: var(--spacing-xl);
+}
+
+.logo h1 {
+    color: white;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar nav ul {
+    list-style: none;
+}
+
+    .sidebar nav ul li {
+        margin-bottom: var(--spacing-md);
+    }
+
+        .sidebar nav ul li a {
+            color: var(--color-text-lighter);
+            text-decoration: none;
+            display: block;
+            padding: var(--spacing-sm);
+            border-radius: var(--border-radius-md);
+            transition: background-color 0.3s;
+        }
+
+            .sidebar nav ul li.active a,
+            .sidebar nav ul li a:hover {
+                background-color: rgba(59, 130, 246, 0.2);
+                color: var(--color-primary);
+            }

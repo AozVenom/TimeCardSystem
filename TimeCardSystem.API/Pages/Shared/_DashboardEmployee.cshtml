@@ -1,0 +1,54 @@
+﻿@model TimeCardSystem.API.Pages.Dashboard.IndexModel
+
+<div class="clock-section employee-dashboard">
+    <div class="user-profile-card">
+        <div class="digital-clock-container">
+            <div class="digital-clock">
+                <div class="clock-time-wrapper">
+                    <div id="clock-time">00:00</div>
+                    <div id="clock-ampm">AM</div>
+                </div>
+                <div id="clock-date">Loading...</div>
+            </div>
+        </div>
+        <div class="profile-info">
+            <h3>@Model.UserName</h3>
+            <p>Employee ID: @(Model.UserID?.Length >= 8 ? Model.UserID.Substring(0, 8) : Model.UserID)</p>
+        </div>
+    </div>
+
+    <div class="clock-action">
+        @if (Model.ActiveTimeEntry != null)
+        {
+            <div class="clock-status active">
+                <div class="status-indicator"></div>
+                <div class="status-text">
+                    <span>Currently Clocked In</span>
+                    <span class="timestamp">@Model.ActiveTimeEntry.ClockIn.ToString("hh:mm tt")</span>
+                </div>
+            </div>
+
+            <form method="post" asp-page-handler="ClockOut">
+                <button type="submit" class="btn-clock btn-clock-out">
+                    <i class="fas fa-sign-out-alt"></i> Clock Out
+                </button>
+            </form>
+        }
+        else
+        {
+            <div class="clock-status">
+                <div class="status-indicator offline"></div>
+                <div class="status-text">
+                    <span>Currently Clocked Out</span>
+                    <span class="timestamp">Ready to start</span>
+                </div>
+            </div>
+
+            <form method="post" asp-page-handler="ClockIn">
+                <button type="submit" class="btn-clock btn-clock-in">
+                    <i class="fas fa-sign-in-alt"></i> Clock In
+                </button>
+            </form>
+        }
+    </div>
+</div>

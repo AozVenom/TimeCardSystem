@@ -1,0 +1,54 @@
+﻿@model TimeCardSystem.API.Pages.Dashboard.IndexModel
+
+<div class="weekly-summary">
+    <h3>My Weekly Hours</h3>
+    <div class="week-selector">
+        <button class="btn-week-nav" onclick="navigateWeek(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <span id="week-display">This Week</span>
+        <button class="btn-week-nav" onclick="navigateWeek(1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <div class="weekly-hours-grid">
+        @{
+            string[] dayNames = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+            int currentDayIndex = ((int)DateTime.Now.DayOfWeek + 6) % 7;
+
+            for (int i = 0; i < 7; i++)
+            {
+                bool isToday = i == currentDayIndex;
+                var dayEntry = Model.RecentTimeEntries.FirstOrDefault(e => e.ClockIn.DayOfWeek == (DayOfWeek)((i + 1) % 7));
+                double hoursWorked = dayEntry?.TotalWorkTime?.TotalHours ?? 0;
+
+                <div class="day-card @(isToday ? "today" : "")">
+                    <div class="day-name">@dayNames[i]</div>
+                    <div class="day-hours">@hoursWorked.ToString("F1")</div>
+                    <div class="day-details">
+                        @if (dayEntry != null)
+                        {
+                            <span>@dayEntry.ClockIn.ToString("HH:mm") - @(dayEntry.ClockOut?.ToString("HH:mm") ?? "Now")</span>
+                        }
+                        else
+                        {
+                            <span>No time entry</span>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <div class="hours-summary">
+        <div class="hours-total">
+            <span>Total Hours:</span>
+            <span class="hours-value">@Model.WeeklyHours.ToString("F1")</span>
+        </div>
+        <div class="hours-target">
+            <span>Target:</span>
+            <span class="hours-value">40.0</span>
+        </div>
+    </div>
+</div>

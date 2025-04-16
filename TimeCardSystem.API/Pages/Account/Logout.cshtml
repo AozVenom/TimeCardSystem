@@ -1,0 +1,30 @@
+﻿@page
+@model TimeCardSystem.API.Pages.Account.LogoutModel
+@{
+    ViewData["Title"] = "Logout";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Time Card System - Logging Out</title>
+    <link rel="stylesheet" href="~/css/main.css" />
+    <meta http-equiv="refresh" content="2;url=/Account/Login" />
+</head>
+<body class="login-page">
+    <div class="background-shapes">
+        <div class="blue-circle"></div>
+        <div class="orange-circle"></div>
+    </div>
+
+    <div class="login-container">
+        <div class="login-form">
+            <h2>Logging Out</h2>
+            <p>You are being logged out of the system...</p>
+            <div class="loader"></div>
+            <p>If you are not redirected automatically, <a href="/Account/Login">click here</a> to go to the login page.</p>
+        </div>
+    </div>
+</body>
+</html>

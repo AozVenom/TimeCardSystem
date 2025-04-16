@@ -1,0 +1,65 @@
+﻿@page
+@model TimeCardSystem.API.Pages.Dashboard.IndexModel
+@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["ActivePage"] = "Dashboard";
+    Layout = "_TimeEntriesLayout";
+
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var userRoles = User.Claims
+        .Where(c => c.Type == ClaimTypes.Role)
+        .Select(c => c.Value)
+        .ToList();
+
+    var isEmployee = User.IsInRole("Employee") || User.IsInRole("1");
+    var isManager = User.IsInRole("Manager") || User.IsInRole("2");
+    var isAdmin = User.IsInRole("Administrator") || User.IsInRole("3");
+
+    var hasAnyRole = isEmployee || isManager || isAdmin;
+}
+
+<header class="dashboard-header">
+    <div class="user-info">
+        <h2>Welcome, @Model.UserName</h2>
+        <p>@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</p>
+    </div>
+</header>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="error-message">
+        <p>@Model.ErrorMessage</p>
+    </div>
+}
+
+@if (!hasAnyRole)
+{
+    <partial name="_DashboardEmployee" model="Model" />
+}
+
+@if (isEmployee)
+{
+    <partial name="_DashboardEmployee" model="Model" />
+    <partial name="_ScheduleSummary" model="Model" />
+    <partial name="_WeeklySummary" model="Model" />
+    <partial name="_RecentActivity" model="Model" />
+}
+
+@if (isManager)
+{
+    <partial name="_DashboardManager" model="Model" />
+}
+
+@if (isAdmin)
+{
+    <partial name="_DashboardAdmin" model="Model" />
+}
+
+@section Scripts {
+    @if (isEmployee || isManager || !hasAnyRole)
+    {
+        <script src="~/js/dashboard.js" asp-append-version="true"></script>
+    }
+}

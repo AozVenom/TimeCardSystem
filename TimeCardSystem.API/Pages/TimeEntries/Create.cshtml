@@ -1,0 +1,59 @@
+﻿@page
+@model TimeCardSystem.API.Pages.Schedule.CreateModel
+@{
+    ViewData["Title"] = "Create Schedule";
+    ViewData["ActivePage"] = "Schedule";
+    Layout = "_TimeEntriesLayout";
+}
+
+<header>
+    <div class="user-info">
+        <h2>Create New Schedule</h2>
+        <p>@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</p>
+    </div>
+</header>
+
+<div class="container-content">
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="ScheduleViewModel.EmployeeId">Employee</label>
+            <select asp-for="ScheduleViewModel.EmployeeId"
+                    asp-items="Model.Employees"
+                    class="form-control">
+                <option value="">Select Employee</option>
+            </select>
+            <span asp-validation-for="ScheduleViewModel.EmployeeId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ScheduleViewModel.ShiftStart">Shift Start</label>
+            <input asp-for="ScheduleViewModel.ShiftStart" type="datetime-local" class="form-control" />
+            <span asp-validation-for="ScheduleViewModel.ShiftStart" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <div class="form-check">
+                <input asp-for="ScheduleViewModel.HasLunch" class="form-check-input" />
+                <label asp-for="ScheduleViewModel.HasLunch" class="form-check-label">
+                    Include 30-minute Lunch Break
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ScheduleViewModel.Location">Location</label>
+            <input asp-for="ScheduleViewModel.Location" class="form-control" />
+            <span asp-validation-for="ScheduleViewModel.Location" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ScheduleViewModel.Notes">Notes (Optional)</label>
+            <textarea asp-for="ScheduleViewModel.Notes" class="form-control"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create Schedule</button>
+            <a asp-page="/Schedule/Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>

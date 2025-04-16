@@ -1,0 +1,28 @@
+﻿
+.status-badge {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 9999px;
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+}
+
+.status-active {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.status-approved {
+    background-color: var(--color-success);
+    color: white;
+}
+
+.status-rejected {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.status-edited {
+    background-color: var(--color-warning);
+    color: white;
+}

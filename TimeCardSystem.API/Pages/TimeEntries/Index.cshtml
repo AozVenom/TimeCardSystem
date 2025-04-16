@@ -1,0 +1,58 @@
+﻿@page
+@model TimeCardSystem.API.Pages.TimeEntries.IndexModel
+@{
+    ViewData["Title"] = "Time Entries";
+    ViewData["ActivePage"] = "TimeEntries";
+    Layout = "_TimeEntriesLayout";
+}
+
+<header>
+    <div class="user-info">
+        <h2>My Time Entries</h2>
+        <p>@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</p>
+    </div>
+</header>
+
+<div class="container-content">
+    <div class="mb-3">
+        <a asp-page="/TimeEntries/Create" class="btn btn-primary">Add New Entry</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Clock In</th>
+                <th>Clock Out</th>
+                <th>Total Hours</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var entry in Model.TimeEntries)
+            {
+                <tr>
+                    <td>@entry.ClockIn.ToString("d")</td>
+                    <td>@entry.ClockIn.ToString("t")</td>
+                    <td>@(entry.ClockOut?.ToString("t") ?? "Active")</td>
+                    <td>@(entry.TotalWorkTime?.ToString(@"hh\:mm") ?? "N/A")</td>
+                    <td>
+                        <span class="status-badge status-@entry.Status.ToString().ToLower()">
+                            @entry.Status
+                        </span>
+                    </td>
+                    <td>
+                        <a asp-page="/TimeEntries/Edit" asp-route-id="@entry.Id" class="btn btn-sm btn-warning">Edit</a>
+                    </td>
+                </tr>
+            }
+            @if (!Model.TimeEntries.Any())
+            {
+                <tr>
+                    <td colspan="6" class="text-center">No time entries found. Click "Add New Entry" to create one.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

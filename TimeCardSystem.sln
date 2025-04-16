@@ -1,0 +1,79 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeCardSystem.API", "TimeCardSystem.API\TimeCardSystem.API.csproj", "{D9EEA983-DA01-421F-9EE0-E2B32508EBAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeCardSystem.Core", "TimeCardSystem.Core\TimeCardSystem.Core.csproj", "{FC43B423-4A29-43E8-8149-ED13E13EF14D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeCardSystem.Infrastructure", "TimeCardSystem.Infrastructure\TimeCardSystem.Infrastructure.csproj", "{1200B169-464E-411E-9BAF-D15363A8485F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeCardSystem.Tests", "TimeCardSystem.Tests\TimeCardSystem.Tests.csproj", "{5855DC63-9B8D-4334-9066-DC2333B7910F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3038F329-9062-4BC2-9318-C484BCC75944}"
+	ProjectSection(SolutionItems) = preProject
+		API_DOCUMENTATION.md = API_DOCUMENTATION.md
+		SETUP_GUIDE.md = SETUP_GUIDE.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{32A82616-423A-4DF8-8B4D-8DDEB9B07CC3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "database", "database", "{2B5493C0-3FFE-4FC4-B634-64A1F05C8472}"
+	ProjectSection(SolutionItems) = preProject
+		create_database.sql = create_database.sql
+		seed_data.sql = seed_data.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deployment", "deployment", "{EFA90F3A-CAC9-4F15-8F71-146B22C75CC5}"
+	ProjectSection(SolutionItems) = preProject
+		deploy.sh = deploy.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{3A28ACA8-6218-47EE-BA5B-DEE27DECDD36}"
+	ProjectSection(SolutionItems) = preProject
+		TimeCardSystem.API\appsettings.Development.json = TimeCardSystem.API\appsettings.Development.json
+		TimeCardSystem.API\appsettings.json = TimeCardSystem.API\appsettings.json
+		appsettings.Production.json = appsettings.Production.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F2C38277-3A95-4FCC-9FD8-B70D96D5435D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9EEA983-DA01-421F-9EE0-E2B32508EBAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9EEA983-DA01-421F-9EE0-E2B32508EBAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9EEA983-DA01-421F-9EE0-E2B32508EBAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9EEA983-DA01-421F-9EE0-E2B32508EBAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC43B423-4A29-43E8-8149-ED13E13EF14D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC43B423-4A29-43E8-8149-ED13E13EF14D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC43B423-4A29-43E8-8149-ED13E13EF14D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC43B423-4A29-43E8-8149-ED13E13EF14D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1200B169-464E-411E-9BAF-D15363A8485F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1200B169-464E-411E-9BAF-D15363A8485F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1200B169-464E-411E-9BAF-D15363A8485F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1200B169-464E-411E-9BAF-D15363A8485F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5855DC63-9B8D-4334-9066-DC2333B7910F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5855DC63-9B8D-4334-9066-DC2333B7910F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5855DC63-9B8D-4334-9066-DC2333B7910F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5855DC63-9B8D-4334-9066-DC2333B7910F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2B5493C0-3FFE-4FC4-B634-64A1F05C8472} = {32A82616-423A-4DF8-8B4D-8DDEB9B07CC3}
+		{EFA90F3A-CAC9-4F15-8F71-146B22C75CC5} = {32A82616-423A-4DF8-8B4D-8DDEB9B07CC3}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {249221A7-1B2C-4984-A35F-592F304DA0F2}
+	EndGlobalSection
+EndGlobal

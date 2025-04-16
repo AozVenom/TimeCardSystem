@@ -1,0 +1,47 @@
+﻿@page "{id:int}"
+@model TimeCardSystem.API.Pages.TimeEntries.EditModel
+@{
+    ViewData["Title"] = "Edit Time Entry";
+    ViewData["ActivePage"] = "TimeEntries";
+    Layout = "_TimeEntriesLayout";
+}
+
+<header>
+    <div class="user-info">
+        <h2>Edit Time Entry</h2>
+        <p>@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</p>
+    </div>
+</header>
+
+<div class="container-content">
+    <form method="post">
+        <input asp-for="TimeEntry.Id" type="hidden" />
+
+        <div class="form-group">
+            <label asp-for="TimeEntry.ClockIn">Clock In Time</label>
+            <input asp-for="TimeEntry.ClockIn" class="form-control" type="datetime-local" />
+            <span asp-validation-for="TimeEntry.ClockIn" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TimeEntry.ClockOut">Clock Out Time</label>
+            <input asp-for="TimeEntry.ClockOut" class="form-control" type="datetime-local" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TimeEntry.BreakDuration">Break Duration (HH:MM)</label>
+            <input asp-for="TimeEntry.BreakDuration" class="form-control" type="time" />
+            <small class="form-text">Enter total break time in hours and minutes</small>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TimeEntry.Status">Status</label>
+            <select asp-for="TimeEntry.Status" asp-items="Html.GetEnumSelectList<TimeCardSystem.Core.Models.TimeEntryStatus>()" class="form-control"></select>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Update Entry</button>
+            <a asp-page="/TimeEntries/Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Time Card System</title>
+    <link rel="stylesheet" href="~/css/main.css" />
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <header>
+        <nav>
+            <!-- Add navigation menu items -->
+            <a asp-page="/Index">Home</a>
+            <a asp-page="/Dashboard/Index">Dashboard</a>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-page="/Account/Logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            }
+            else
+            {
+                <a asp-page="/Account/Login">Login</a>
+            }
+        </nav>
+    </header>
+
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Time Card System</p>
+    </footer>
+
+    <script src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,50 @@
+# .NET Core build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+[Bb]uild/
+
+# Visual Studio files
+.vs/
+*.user
+*.userosscache
+*.suo
+*.csproj.user
+*.pubxml.user
+*.dbmdl
+*.jfm
+
+# User-specific files
+*.rsuser
+*.userprefs
+
+# NuGet packages
+*.nupkg
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Logs
+*.log
+logs/
+
+# Local configuration
+appsettings.Development.json
+appsettings.*.json
+!appsettings.json
+
+# Database files
+*.mdf
+*.ldf
+*.ndf
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+*~
+
+# OS-specific files
+.DS_Store
+Thumbs.db

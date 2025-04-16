@@ -1,0 +1,63 @@
+﻿@page
+@model TimeCardSystem.API.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Time Card System Register</title>
+    <link rel="stylesheet" href="~/css/main.css" />
+</head>
+<body class="login-page">
+    <div class="background-shapes">
+        <div class="blue-circle"></div>
+        <div class="orange-circle"></div>
+    </div>
+
+    <div class="login-container">
+        <form method="post" class="login-form">
+            <h2>Create Account</h2>
+
+            @if (!ModelState.IsValid)
+            {
+                <div class="error">
+                    @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                </div>
+            }
+
+            <div class="form-group">
+                <label for="FirstName">First Name</label>
+                <input asp-for="Input.FirstName" placeholder="Enter your first name" id="FirstName">
+            </div>
+
+            <div class="form-group">
+                <label for="LastName">Last Name</label>
+                <input asp-for="Input.LastName" placeholder="Enter your last name" id="LastName">
+            </div>
+
+            <div class="form-group">
+                <label for="Email">Email Address</label>
+                <input asp-for="Input.Email" placeholder="Enter your email" id="Email">
+            </div>
+
+            <div class="form-group">
+                <label for="Password">Password</label>
+                <input asp-for="Input.Password" type="password" placeholder="Create a password" id="Password">
+            </div>
+
+            <div class="form-group">
+                <label for="ConfirmPassword">Confirm Password</label>
+                <input asp-for="Input.ConfirmPassword" type="password" placeholder="Confirm your password" id="ConfirmPassword">
+            </div>
+
+            <button type="submit" class="login-btn">Register</button>
+        </form>
+    </div>
+</body>
+</html>

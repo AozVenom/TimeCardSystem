@@ -1,0 +1,88 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Time Card System</title>
+    <link rel="stylesheet" href="~/css/main.css" />
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Time Card</h1>
+            </div>
+            <nav>
+                <ul>
+                    <!-- Common navigation items for all users -->
+                    <li class="@(ViewData["ActivePage"]?.ToString() == "Dashboard" ? "active" : "")">
+                        <a href="/Dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    </li>
+
+                    <!-- Manager & Admin specific navigation -->
+                    @if (!User.IsInRole("Employee") && !User.IsInRole("1"))
+                    {
+                        <!-- Only show My Time for non-employees -->
+                        <li class="@(ViewData["ActivePage"]?.ToString() == "TimeEntries" ? "active" : "")">
+                            <a href="/TimeEntries"><i class="fas fa-clock"></i> My Time</a>
+                        </li>
+                    }
+
+                    <!-- Manager specific navigation -->
+                    @if (User.IsInRole("Manager") || User.IsInRole("2") || User.IsInRole("Administrator") || User.IsInRole("3"))
+                    {
+                        <li class="@(ViewData["ActivePage"]?.ToString() == "TeamTime" ? "active" : "")">
+                            <a href="/TeamTime"><i class="fas fa-users"></i> Team Time</a>
+                        </li>
+                        <li class="@(ViewData["ActivePage"]?.ToString() == "Schedule" ? "active" : "")">
+                            <a href="/Schedule/Manage"><i class="fas fa-calendar-alt"></i> Schedule</a>
+                        </li>
+                        <li class="@(ViewData["ActivePage"]?.ToString() == "Approvals" ? "active" : "")">
+                            <a href="/Approvals"><i class="fas fa-check-circle"></i> Approvals</a>
+                        </li>
+                    }
+
+                    <!-- Admin specific navigation -->
+                    @if (User.IsInRole("Administrator") || User.IsInRole("3"))
+                    {
+                        <li class="@(ViewData["ActivePage"]?.ToString() == "Users" ? "active" : "")">
+                            <a href="/Admin/Users"><i class="fas fa-user-cog"></i> Users</a>
+                        </li>
+                        <li class="@(ViewData["ActivePage"]?.ToString() == "Reports" ? "active" : "")">
+                            <a href="/Admin/Reports"><i class="fas fa-file-alt"></i> Reports</a>
+                        </li>
+                        <li class="@(ViewData["ActivePage"]?.ToString() == "Settings" ? "active" : "")">
+                            <a href="/Admin/Settings"><i class="fas fa-cog"></i> Settings</a>
+                        </li>
+                    }
+
+                    <!-- Common navigation items at bottom for all users -->
+                    <li class="@(ViewData["ActivePage"]?.ToString() == "Profile" ? "active" : "")">
+                        <a href="/Profile"><i class="fas fa-user"></i> Profile</a>
+                    </li>
+                    <li>
+                        <a href="/Account/Logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Add jQuery and script references -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Add the schedule.js script reference - this loads on all pages using this layout -->
+    <script src="~/js/schedule.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

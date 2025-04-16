@@ -1,0 +1,26 @@
+﻿@model TimeCardSystem.API.Pages.Dashboard.IndexModel
+
+<div class="recent-activity">
+    <h3>Recent Activity</h3>
+    <table class="activity-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Clock In</th>
+                <th>Clock Out</th>
+                <th>Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var entry in Model.RecentTimeEntries.Take(5))
+            {
+                <tr>
+                    <td>@entry.ClockIn.ToString("MM/dd/yyyy")</td>
+                    <td>@entry.ClockIn.ToString("HH:mm")</td>
+                    <td>@(entry.ClockOut?.ToString("HH:mm") ?? "Active")</td>
+                    <td>@(entry.TotalWorkTime?.ToString(@"hh\:mm") ?? "N/A")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

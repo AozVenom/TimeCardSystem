@@ -1,0 +1,29 @@
+﻿@model TimeCardSystem.API.Pages.Dashboard.IndexModel
+
+<!-- Manager Dashboard -->
+<div class="dashboard-new-layout">
+    <!-- Clock In/Out Section -->
+    <partial name="_DashboardEmployee" model="Model" />
+
+    <!-- Team Management Section for Managers -->
+    <div class="team-section">
+        <h3>My Team</h3>
+
+        <div class="team-stats">
+            <div class="stat-card">
+                <div class="stat-value">@Model.TeamMemberCount</div>
+                <div class="stat-label">Team Members</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">@Model.ClockedInCount</div>
+                <div class="stat-label">Currently Active</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">@Model.PendingApprovals</div>
+                <div class="stat-label">Pending Approvals</div>
+            </div>
+        </div>
+
+        <!-- Team member list would go here -->
+    </div>
+</div>

@@ -1,0 +1,46 @@
+﻿@model TimeCardSystem.API.Pages.Dashboard.IndexModel
+
+<div class="upcoming-schedule">
+    <h3>My Upcoming Schedule</h3>
+
+    <div class="upcoming-shifts">
+        @if (Model.UpcomingSchedules != null && Model.UpcomingSchedules.Any())
+        {
+            foreach (var schedule in Model.UpcomingSchedules)
+            {
+                var isToday = schedule.ShiftStart.Date == DateTime.Today;
+                var isFuture = schedule.ShiftStart.Date > DateTime.Today;
+
+                <div class="shift-card @(isToday ? "today" : "") @(isFuture ? "future" : "")">
+                    <div class="shift-date">
+                        <div class="day">@schedule.ShiftStart.ToString("ddd")</div>
+                        <div class="date">@schedule.ShiftStart.ToString("MMM d")</div>
+                    </div>
+                    <div class="shift-details">
+                        <div class="shift-time">@schedule.ShiftStart.ToString("h:mm tt") - @schedule.ShiftEnd.ToString("h:mm tt")</div>
+                        <div class="shift-location">@schedule.Location</div>
+                        @if (!string.IsNullOrEmpty(schedule.Notes))
+                        {
+                            <div class="shift-notes">@schedule.Notes</div>
+                        }
+                    </div>
+                    <div class="shift-status @(schedule.Status.ToString().ToLower())">
+                        @schedule.Status
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="no-shifts">
+                <p>No upcoming shifts scheduled.</p>
+            </div>
+        }
+    </div>
+
+    <div class="schedule-footer">
+        <a href="/Schedule/View" class="view-schedule-link">
+            <i class="fas fa-calendar-alt"></i> View Full Schedule
+        </a>
+    </div>
+</div>
