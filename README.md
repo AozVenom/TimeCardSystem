@@ -1,160 +1,201 @@
-# Time Card System
-A comprehensive solution for employee time tracking, scheduling, and attendance management built with ASP.NET Core 8.0. The system provides role-based access with different functionalities for employees, managers, and administrators, facilitating efficient workforce management.
+﻿# ⏱️ Time Card System
 
-##Features
+A comprehensive solution for employee time tracking, scheduling, and attendance management built with **ASP.NET Core 8.0**. The system provides role-based access for Employees, Managers, and Administrators, allowing streamlined workforce management.
 
-User Management: Role-based system with Employee, Manager, and Administrator access levels
-Time Tracking: Clock in/out functionality with break time tracking
-Schedule Management: Create and manage employee work schedules
-Automatic Calculations: Smart calculation of shift times based on standard work hours and lunch breaks
-Dashboard Views: Role-specific dashboards showing relevant information
-Team Management: View and manage team schedules from a single interface
-Conflict Detection: Automatic detection of scheduling conflicts
+---
 
-##Technology Stack
+## 🚀 Features
 
-Backend: ASP.NET Core 8.0 with Razor Pages
-Database: SQL Server with Entity Framework Core
-Authentication: ASP.NET Core Identity
-Frontend: HTML, CSS, JavaScript
-Architecture: Clean architecture with repository pattern
+- **User Management:** Role-based access for Employee, Manager, and Administrator
+- **Time Tracking:** Clock in/out functionality with break tracking
+- **Schedule Management:** Create and manage employee schedules
+- **Smart Calculations:** Automatic shift length & break-time adjustments
+- **Dashboards:** Role-specific views with relevant tools and metrics
+- **Team View:** Managers can view and manage entire teams
+- **Conflict Detection:** Alerts for overlapping or duplicate shifts
 
-Prerequisites
+---
 
-.NET 8.0 SDK or later
-SQL Server 2019 or later (or SQL Server Express)
-Visual Studio 2022 or Visual Studio Code with C# extensions
+## 🛠️ Technology Stack
 
-Installation
+- **Backend:** ASP.NET Core 8.0 (Razor Pages)
+- **Frontend:** HTML, CSS, JavaScript
+- **Database:** SQL Server with Entity Framework Core
+- **Authentication:** ASP.NET Core Identity
+- **Architecture:** Clean Architecture with Repository Pattern
 
-Clone the repository
+---
+
+## ⚙️ Prerequisites
+
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download) or later  
+- SQL Server 2019 or later (or SQL Server Express)  
+- Visual Studio 2022 or VS Code with C# extensions  
+
+---
+
+## 📥 Installation
+
+### 1. Clone the repository
+
+```bash
 git clone https://github.com/yourusername/timecardsystem.git
 cd timecardsystem
+2. Update the Connection String
+In appsettings.json:
 
-Update the connection string
-Open appsettings.json and update the connection string to point to your SQL Server instance:
-json"ConnectionStrings": {
+json
+Copy
+Edit
+"ConnectionStrings": {
   "DefaultConnection": "Server=YOUR_SERVER;Database=TimeCardSystem;Trusted_Connection=True;MultipleActiveResultSets=true"
 }
-
-Apply database migrations
+3. Apply Database Migrations
+bash
+Copy
+Edit
 dotnet ef database update
-
-Run the application
+4. Run the Application
+bash
+Copy
+Edit
 dotnet run --project TimeCardSystem.API
-Or open the solution in Visual Studio and press F5 to start.
-Default login credentials
+Or open the solution in Visual Studio and press F5.
 
-Email: test@example.com
+🔐 Default Login Credentials
+text
+Copy
+Edit
+Email: test@example.com  
 Password: Password123!
+⚠️ Change these credentials after first login.
 
-(Change these credentials after first login)
+👤 Usage by Role
+👷 Employee
+Clock in/out for shifts
 
-Usage
-Employee Functions
-
-Clock in/out for work shifts
 View personal schedule
-Track work hours and breaks
+
+Track breaks and work hours
+
 Request time off
 
-Manager Functions
-
+👨‍💼 Manager
 Create and manage team schedules
-View team time entries
-Approve/reject time entries
-Generate team reports
-Set up recurring schedules
 
-Administrator Functions
+Approve or reject time entries
 
-Manage users and permissions
-Configure system settings
-Access all system functions
-View system-wide analytics
+Generate reports
 
-Project Structure
-The solution follows a clean architecture approach with clear separation of concerns:
+View all team member logs
 
-TimeCardSystem.Core: Contains domain models, interfaces, and business logic
-TimeCardSystem.Infrastructure: Data access layer and external service implementations
-TimeCardSystem.API: User interface and API endpoints
-TimeCardSystem.Tests: Unit and integration tests
+Set up recurring shifts
 
-Key Components
-Models
+👨‍💻 Administrator
+Manage users and system roles
 
-User: Extended Identity User with role-based access
-TimeEntry: Track clock in/out and break times
-Schedule: Manage employee work schedules
+Configure system-wide settings
 
-Repositories
+Full access to all data and analytics
 
-Implement the repository pattern for data access
-Support complex querying and CRUD operations
-Separate data access concerns from business logic
+🧱 Project Structure
+TimeCardSystem.Core – Domain models & interfaces
 
-View Models
+TimeCardSystem.Infrastructure – Data access and EF Core
 
-Separate presentation logic from domain models
-Provide data transfer and validation
-Support frontend rendering requirements
+TimeCardSystem.API – Razor Pages and endpoints
 
-Development
-Adding Migrations
-To add a new database migration:
+TimeCardSystem.Tests – Unit and integration tests
+
+🧩 Key Components
+📦 Models
+User: Identity user extended with roles
+
+TimeEntry: Clock in/out, breaks
+
+Schedule: Work shifts
+
+📚 Repositories
+Follows repository pattern
+
+Supports complex queries
+
+Keeps data logic separate from business logic
+
+📄 ViewModels
+For frontend/backend communication
+
+Handles validation and data formatting
+
+🧪 Development
+Create a Migration
+bash
+Copy
+Edit
 dotnet ef migrations add MigrationName --project TimeCardSystem.Infrastructure --startup-project TimeCardSystem.API
-Running Tests
+Run Unit Tests
+bash
+Copy
+Edit
 dotnet test
-Recommended Development Workflow
+Workflow
+Create a branch from main
 
-Create a feature branch from the main branch
-Implement the feature with appropriate tests
-Run all tests to ensure nothing is broken
-Submit a pull request for review
+Build feature + write tests
 
-Deployment
-Preparing for Production
+Run tests and code review
 
-Update appsettings.Production.json with production settings
-Build the application in Release configuration:
+Submit pull request
+
+🚀 Deployment
+1. Update Production Settings
+Edit appsettings.Production.json
+
+2. Publish
+bash
+Copy
+Edit
 dotnet publish -c Release -o ./publish
+Requirements
+Web server (IIS, Nginx, Apache)
 
-Deploy the contents of the publish directory to your production server
+SQL Server
 
-Production Requirements
+SSL certificate (HTTPS)
 
-Web server (IIS, Nginx, etc.)
-SQL Server database
-HTTPS certificate for secure communication
+📸 Screenshots
+🔹 Employee Dashboard
 
-Contributing
+🔹 Manager Clock In / Log In
 
-Fork the repository
-Create a feature branch: git checkout -b feature/your-feature-name
-Commit your changes: git commit -m 'Add some feature'
-Push to the branch: git push origin feature/your-feature-name
-Submit a pull request
+🔹 Manager Schedule View
 
-Troubleshooting
-Common Issues
+🔹 Swagger API Endpoints
 
-Database Connection Errors: Verify your connection string is correct
-Migration Issues: Ensure you're using the correct project for migrations
-Authentication Problems: Check user roles and permissions
+🧯 Troubleshooting
+Connection Errors: Double-check your connection string
 
-Future Enhancements
+Migration Fails: Ensure EF tools are installed and DB is reachable
 
+Authentication Issues: Check user roles and Identity configuration
+
+🔮 Future Enhancements
 Mobile application
-API integration with third-party systems
-Advanced reporting and analytics
-Geolocation-based clock in/out
-Automated scheduling based on business needs
 
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
-Acknowledgments
+Google Calendar integration
 
-ASP.NET Core Documentation
+Geo-fencing for clock in/out
+
+Advanced analytics & heatmaps
+
+AI-powered schedule suggestions
+
+📄 License
+This project is licensed under the MIT License – see the LICENSE file.
+
+🙏 Acknowledgments
+ASP.NET Core Docs
+
 Entity Framework Core
+
 Bootstrap

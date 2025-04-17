@@ -40,7 +40,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F2C38277-3A95-4FCC-9FD8-B70D96D5435D}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		..\..\..\Desktop\TIMECARD SCREENSHOTS\Employee.PNG = ..\..\..\Desktop\TIMECARD SCREENSHOTS\Employee.PNG
+		..\..\..\Desktop\TIMECARD SCREENSHOTS\Manager Log in Clock in.PNG = ..\..\..\Desktop\TIMECARD SCREENSHOTS\Manager Log in Clock in.PNG
+		..\..\..\Desktop\TIMECARD SCREENSHOTS\Manager Schedule.PNG = ..\..\..\Desktop\TIMECARD SCREENSHOTS\Manager Schedule.PNG
 		README.md = README.md
+		..\..\..\Desktop\TIMECARD SCREENSHOTS\SwaggerAPI Endpoints.PNG = ..\..\..\Desktop\TIMECARD SCREENSHOTS\SwaggerAPI Endpoints.PNG
 	EndProjectSection
 EndProject
 Global
