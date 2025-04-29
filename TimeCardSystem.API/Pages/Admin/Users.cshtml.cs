@@ -24,6 +24,9 @@ namespace TimeCardSystem.API.Pages.Admin
         {
             _userRepository = userRepository;
             _logger = logger;
+
+            // Initialize non-nullable property
+            StatusMessage = string.Empty;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -44,13 +47,13 @@ namespace TimeCardSystem.API.Pages.Admin
         {
             try
             {
-                // Get all users (we'll handle pagination manually)
+
                 var allUsers = await _userRepository.GetAllAsync();
 
                 // Calculate pagination
                 int totalUsers = allUsers.Count();
                 TotalPages = (int)Math.Ceiling(totalUsers / (double)PageSize);
-                
+
                 // Apply pagination
                 Users = allUsers
                     .OrderBy(u => u.FirstName)
@@ -62,8 +65,19 @@ namespace TimeCardSystem.API.Pages.Admin
                 // Retrieve status message from TempData if available
                 if (TempData["StatusMessage"] != null)
                 {
-                    StatusMessage = TempData["StatusMessage"].ToString();
-                    IsError = TempData["IsError"] != null && (bool)TempData["IsError"];
+                    // Fix for null reference warning - check if TempData value exists
+                    var statusMsg = TempData["StatusMessage"]?.ToString();
+                    if (statusMsg != null)
+                    {
+                        StatusMessage = statusMsg;
+                    }
+
+                    // Fix for unboxing possibly null value - check if TempData value exists
+                    if (TempData["IsError"] != null)
+                    {
+                        // Fix for line 78 - Safe unboxing of possibly null value
+                        IsError = TempData["IsError"] is bool isError && isError;
+                    }
                 }
 
                 return Page();
@@ -94,7 +108,7 @@ namespace TimeCardSystem.API.Pages.Admin
                 }
 
                 byte[] bytes = Encoding.UTF8.GetBytes(csvBuilder.ToString());
-                
+
                 return File(bytes, "text/csv", $"users_export_{DateTime.Now:yyyy-MM-dd}.csv");
             }
             catch (Exception ex)

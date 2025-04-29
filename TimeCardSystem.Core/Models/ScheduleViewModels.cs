@@ -69,9 +69,8 @@ namespace TimeCardSystem.API.ViewModels
             };
         }
     }
-}
 
-public class EmployeeScheduleViewModel
+    public class EmployeeScheduleViewModel
     {
         public string EmployeeId { get; set; } = string.Empty;
         public string EmployeeName { get; set; } = string.Empty;
@@ -123,3 +122,4 @@ public class EmployeeScheduleViewModel
         [Display(Name = "Status")]
         public ScheduleStatus? Status { get; set; }
     }
+}

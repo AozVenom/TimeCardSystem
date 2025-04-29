@@ -8,17 +8,17 @@ namespace TimeCardSystem.Core.Dtos
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required]
         [MinLength(6)]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         [Required]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         [Required]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
         public UserRole Role { get; set; } = UserRole.Employee;
     }
@@ -26,7 +26,7 @@ namespace TimeCardSystem.Core.Dtos
     public class TimeEntryDto
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
         public DateTime ClockIn { get; set; }
         public DateTime? ClockOut { get; set; }
         public TimeSpan? BreakDuration { get; set; }
@@ -40,18 +40,18 @@ namespace TimeCardSystem.Core.Dtos
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
     }
 
     public class AuthResponseDto
     {
-        public string Token { get; set; }
+        public string Token { get; set; } = string.Empty;
         public DateTime Expiration { get; set; }
-        public string UserId { get; set; }
-        public string Email { get; set; }
+        public string UserId { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public UserRole Role { get; set; }
     }
 
@@ -60,9 +60,9 @@ namespace TimeCardSystem.Core.Dtos
         public int Id { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
-        public string UserName { get; set; }  // For displaying employee name
+        public string UserName { get; set; } = string.Empty;  // For displaying employee name
 
         [Required]
         public DateTime ShiftStart { get; set; }
@@ -72,15 +72,15 @@ namespace TimeCardSystem.Core.Dtos
 
         public ScheduleStatus Status { get; set; }
 
-        public string Location { get; set; }
+        public string Location { get; set; } = string.Empty;
 
-        public string Notes { get; set; }
+        public string Notes { get; set; } = string.Empty;
 
         public TimeSpan? BreakDuration { get; set; }
 
-        public string CreatedById { get; set; }
+        public string CreatedById { get; set; } = string.Empty;
 
-        public string CreatedByName { get; set; }  // For displaying manager name
+        public string CreatedByName { get; set; } = string.Empty;  // For displaying manager name
 
         public DateTime CreatedAt { get; set; }
 
@@ -92,7 +92,7 @@ namespace TimeCardSystem.Core.Dtos
     public class CreateScheduleDto
     {
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
         [Required]
         public DateTime ShiftStart { get; set; }
@@ -126,9 +126,9 @@ namespace TimeCardSystem.Core.Dtos
 
         public ScheduleStatus? Status { get; set; }
 
-        public string Location { get; set; }
+        public string Location { get; set; } = string.Empty;
 
-        public string Notes { get; set; }
+        public string Notes { get; set; } = string.Empty;
 
         public TimeSpan? BreakDuration { get; set; }
     }

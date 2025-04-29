@@ -17,12 +17,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Bootstrap modal instances
     let editUserModal, createUserModal, deleteUserModal;
+    let createConfirmModal, editConfirmModal, deleteConfirmModal, statusConfirmModal, bulkConfirmModal;
 
     // Initialize Bootstrap modals
     if (typeof bootstrap !== 'undefined') {
+        // Action modals
         createUserModal = new bootstrap.Modal(document.getElementById('createUserModal'));
         editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
         deleteUserModal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+
+        // Confirmation modals
+        createConfirmModal = new bootstrap.Modal(document.getElementById('createConfirmModal'));
+        editConfirmModal = new bootstrap.Modal(document.getElementById('editConfirmModal'));
+        deleteConfirmModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+        statusConfirmModal = new bootstrap.Modal(document.getElementById('statusConfirmModal'));
+        bulkConfirmModal = new bootstrap.Modal(document.getElementById('bulkConfirmModal'));
     }
 
     /**
@@ -74,12 +83,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     return response.json();
                 })
                 .then(data => {
-                    showStatusMessage(`User ${data.firstName} ${data.lastName} created successfully.`);
+                    // Hide create form and show success modal
                     createUserModal.hide();
                     createUserForm.reset();
 
-                    // Reload the page to see the new user
-                    window.location.reload();
+                    // Show confirmation modal instead of immediate reload
+                    createConfirmModal.show();
                 })
                 .catch(error => {
                     console.error('Error creating user:', error);
@@ -87,6 +96,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         });
     }
+
+    // Create confirmation button click
+    document.getElementById('createConfirmBtn')?.addEventListener('click', function () {
+        createConfirmModal.hide();
+        window.location.reload();
+    });
 
     /**
      * Edit User Button Click
@@ -160,11 +175,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     return response.json();
                 })
                 .then(data => {
-                    showStatusMessage(`User ${data.firstName} ${data.lastName} updated successfully.`);
+                    // Hide edit modal and show success modal
                     editUserModal.hide();
-
-                    // Reload the page to see the updated user
-                    window.location.reload();
+                    editConfirmModal.show();
                 })
                 .catch(error => {
                     console.error('Error updating user:', error);
@@ -172,6 +185,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         });
     }
+
+    // Edit confirmation button click
+    document.getElementById('editConfirmBtn')?.addEventListener('click', function () {
+        editConfirmModal.hide();
+        window.location.reload();
+    });
 
     /**
      * Toggle Password Reset Fields
@@ -208,16 +227,24 @@ document.addEventListener('DOMContentLoaded', function () {
                         return response.text().then(text => { throw new Error(text) });
                     }
 
-                    showStatusMessage(`User ${isEnable ? 'activated' : 'deactivated'} successfully.`);
+                    // Set confirmation message based on the action
+                    const statusMessage = isEnable ? 'User has been activated successfully.' : 'User has been deactivated successfully.';
+                    document.getElementById('statusConfirmMessage').textContent = statusMessage;
 
-                    // Reload the page to reflect the status change
-                    window.location.reload();
+                    // Show confirmation modal instead of immediate reload
+                    statusConfirmModal.show();
                 })
                 .catch(error => {
                     console.error('Error toggling user status:', error);
                     showStatusMessage(error.message || 'Failed to update user status.', true);
                 });
         });
+    });
+
+    // Status confirmation button click
+    document.getElementById('statusConfirmBtn')?.addEventListener('click', function () {
+        statusConfirmModal.hide();
+        window.location.reload();
     });
 
     /**
@@ -246,11 +273,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     return response.text().then(text => { throw new Error(text) });
                 }
 
-                showStatusMessage('User deleted successfully.');
+                // Hide delete modal and show confirmation modal
                 deleteUserModal.hide();
-
-                // Reload the page to reflect the deletion
-                window.location.reload();
+                deleteConfirmModal.show();
             })
             .catch(error => {
                 console.error('Error deleting user:', error);
@@ -259,66 +284,67 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 
+    // Delete confirmation button click
+    document.getElementById('deleteConfirmBtn')?.addEventListener('click', function () {
+        deleteConfirmModal.hide();
+        window.location.reload();
+    });
+
     /**
      * Search Functionality
      */
     if (searchInput) {
-        searchInput.addEventListener('input', function () {
-            const searchTerm = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#usersTable tbody tr');
-
-            rows.forEach(row => {
-                const name = row.cells[1].textContent.toLowerCase();
-                const email = row.cells[2].textContent.toLowerCase();
-
-                if (name.includes(searchTerm) || email.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
+        searchInput.addEventListener('input', filterUsers);
     }
 
     /**
      * Filter Functionality
      */
-    function applyFilters() {
-        const roleValue = roleFilter.value;
-        const statusValue = statusFilter.value;
+    function filterUsers() {
+        const searchTerm = searchInput?.value.toLowerCase() || '';
+        const roleValue = roleFilter?.value || '';
+        const statusValue = statusFilter?.value || '';
         const rows = document.querySelectorAll('#usersTable tbody tr');
 
         rows.forEach(row => {
-            let showRow = true;
+            const name = row.cells[1].textContent.toLowerCase();
+            const email = row.cells[2].textContent.toLowerCase();
+            const roleCell = row.cells[3].textContent.trim();
+            const statusCell = row.cells[4].textContent.trim();
 
+            // Search match
+            const searchMatch = !searchTerm ||
+                name.includes(searchTerm) ||
+                email.includes(searchTerm);
+
+            // Role match
+            let roleMatch = true;
             if (roleValue) {
-                const roleCell = row.cells[3].textContent.trim();
-                let roleMatch = false;
-
                 if (roleValue === '1' && roleCell.toLowerCase().includes('employee')) {
                     roleMatch = true;
                 } else if (roleValue === '2' && roleCell.toLowerCase().includes('manager')) {
                     roleMatch = true;
                 } else if (roleValue === '3' && roleCell.toLowerCase().includes('administrator')) {
                     roleMatch = true;
+                } else {
+                    roleMatch = false;
                 }
-
-                showRow = showRow && roleMatch;
             }
 
+            // Status match
+            let statusMatch = true;
             if (statusValue) {
-                const statusCell = row.cells[4].textContent.trim();
-                const statusMatch = (statusValue === 'true' && statusCell === 'Active') ||
+                statusMatch = (statusValue === 'true' && statusCell === 'Active') ||
                     (statusValue === 'false' && statusCell === 'Inactive');
-                showRow = showRow && statusMatch;
             }
 
-            row.style.display = showRow ? '' : 'none';
+            // Show/hide the row
+            row.style.display = (searchMatch && roleMatch && statusMatch) ? '' : 'none';
         });
     }
 
-    if (roleFilter) roleFilter.addEventListener('change', applyFilters);
-    if (statusFilter) statusFilter.addEventListener('change', applyFilters);
+    if (roleFilter) roleFilter.addEventListener('change', filterUsers);
+    if (statusFilter) statusFilter.addEventListener('change', filterUsers);
 
     /**
      * Items Per Page Change
@@ -395,36 +421,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     return response.json();
                 })
                 .then(data => {
-                    let message = '';
-
-                    switch (action) {
-                        case 'activate':
-                            message = `${data.processedCount} users activated successfully.`;
-                            break;
-                        case 'deactivate':
-                            message = `${data.processedCount} users deactivated successfully.`;
-                            if (data.skippedSelf) {
-                                message += ' (Your account was skipped)';
-                            }
-                            break;
-                        case 'delete':
-                            message = `${data.processedCount} users deleted successfully.`;
-                            if (data.skippedSelf) {
-                                message += ' (Your account was skipped)';
-                            }
-                            break;
-                        case 'changeRole':
-                            message = `Changed role for ${data.processedCount} users.`;
-                            if (data.skippedSelf) {
-                                message += ' (Your account was skipped)';
-                            }
-                            break;
-                    }
-
-                    showStatusMessage(message);
-
-                    // Reload the page to reflect the changes
-                    window.location.reload();
+                    // Show confirmation modal instead of immediate reload
+                    bulkConfirmModal.show();
                 })
                 .catch(error => {
                     console.error('Error performing bulk action:', error);
@@ -432,6 +430,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         });
     }
+
+    // Bulk action confirmation button click
+    document.getElementById('bulkConfirmBtn')?.addEventListener('click', function () {
+        bulkConfirmModal.hide();
+        window.location.reload();
+    });
 
     /**
      * Export Users

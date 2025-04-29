@@ -14,24 +14,26 @@ namespace TimeCardSystem.API.Pages.Schedule
     {
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ILogger<CreateModel> _logger;
 
         [BindProperty]
-        public ScheduleCreateViewModel ScheduleViewModel { get; set; }
+        public ScheduleCreateViewModel ScheduleViewModel { get; set; } = new ScheduleCreateViewModel();
 
-        public List<SelectListItem> Employees { get; set; }
+        public List<SelectListItem> Employees { get; set; } = new List<SelectListItem>();
 
         public CreateModel(
             IScheduleRepository scheduleRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            ILogger<CreateModel> logger)
         {
             _scheduleRepository = scheduleRepository;
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
             await LoadEmployeesAsync();
-            ScheduleViewModel = new ScheduleCreateViewModel();
             return Page();
         }
 
@@ -45,7 +47,7 @@ namespace TimeCardSystem.API.Pages.Schedule
 
             try
             {
-                var createdById = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var createdById = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
                 var schedule = ScheduleViewModel.ToScheduleModel(createdById);
 
                 await _scheduleRepository.AddAsync(schedule);
@@ -55,6 +57,7 @@ namespace TimeCardSystem.API.Pages.Schedule
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error creating schedule: {Message}", ex.Message);
                 ModelState.AddModelError(string.Empty, "An error occurred while creating the schedule.");
                 await LoadEmployeesAsync();
                 return Page();

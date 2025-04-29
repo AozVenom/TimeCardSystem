@@ -1,0 +1,374 @@
+﻿@page "/Admin/Reports"
+@model TimeCardSystem.API.Pages.Admin.ReportsModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Time Reports";
+    ViewData["ActivePage"] = "Reports";
+    Layout = "_TimeEntriesLayout";
+
+    var requestToken = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+
+<input type="hidden" name="__RequestVerificationToken" value="@requestToken" />
+
+<div class="reports-container">
+    <!-- Page Header with Title -->
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Time Reports</h2>
+        <div class="action-buttons">
+            <button type="button" id="exportReportBtn" class="btn btn-outline-secondary">
+                <i class="fas fa-file-export"></i> Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Status Messages -->
+    <div id="statusMessageContainer" class="@(string.IsNullOrEmpty(Model.StatusMessage) ? "d-none" : "") mb-3">
+        <div class="alert @(Model.IsError ? "alert-danger" : "alert-success") alert-dismissible fade show" role="alert">
+            <span id="statusMessageText">@Model.StatusMessage</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <!-- Report Filters Card -->
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Report Filters</h5>
+        </div>
+        <div class="card-body">
+            <form id="reportFiltersForm" method="get">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="reportType" class="form-label">Report Type</label>
+                        <select id="reportType" name="reportType" class="form-select">
+                            @if (Model.ReportType == "individual")
+                            {
+                                <option value="individual" selected>Individual Employee</option>
+                            }
+                            else
+                            {
+                                <option value="individual">Individual Employee</option>
+                            }
+
+                            @if (Model.ReportType == "overtime")
+                            {
+                                <option value="overtime" selected>Overtime Report</option>
+                            }
+                            else
+                            {
+                                <option value="overtime">Overtime Report</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="dateRange" class="form-label">Date Range</label>
+                        <select id="dateRange" name="dateRange" class="form-select">
+                            @if (Model.DateRange == "thisWeek")
+                            {
+                                <option value="thisWeek" selected>This Week</option>
+                            }
+                            else
+                            {
+                                <option value="thisWeek">This Week</option>
+                            }
+
+                            @if (Model.DateRange == "lastWeek")
+                            {
+                                <option value="lastWeek" selected>Last Week</option>
+                            }
+                            else
+                            {
+                                <option value="lastWeek">Last Week</option>
+                            }
+
+                            @if (Model.DateRange == "thisMonth")
+                            {
+                                <option value="thisMonth" selected>This Month</option>
+                            }
+                            else
+                            {
+                                <option value="thisMonth">This Month</option>
+                            }
+
+                            @if (Model.DateRange == "lastMonth")
+                            {
+                                <option value="lastMonth" selected>Last Month</option>
+                            }
+                            else
+                            {
+                                <option value="lastMonth">Last Month</option>
+                            }
+
+                            @if (Model.DateRange == "custom")
+                            {
+                                <option value="custom" selected>Custom Range</option>
+                            }
+                            else
+                            {
+                                <option value="custom">Custom Range</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4" id="groupByContainer"
+                         style="@(Model.ReportType == "overtime" ? "" : "display: none;")">
+                        <label for="groupBy" class="form-label">Group By</label>
+                        <select id="groupBy" name="groupBy" class="form-select">
+                            @if (Model.GroupBy == "day")
+                            {
+                                <option value="day" selected>Day</option>
+                            }
+                            else
+                            {
+                                <option value="day">Day</option>
+                            }
+
+                            @if (Model.GroupBy == "week")
+                            {
+                                <option value="week" selected>Week</option>
+                            }
+                            else
+                            {
+                                <option value="week">Week</option>
+                            }
+
+                            @if (Model.GroupBy == "month")
+                            {
+                                <option value="month" selected>Month</option>
+                            }
+                            else
+                            {
+                                <option value="month">Month</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-2 custom-date-range"
+                     style="@(Model.DateRange == "custom" ? "" : "display: none;")">
+                    <div class="col-md-6">
+                        <label for="startDate" class="form-label">Start Date</label>
+                        <input type="date" id="startDate" name="startDate" class="form-control"
+                               value="@(Model.StartDate?.ToString("yyyy-MM-dd"))">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="endDate" class="form-label">End Date</label>
+                        <input type="date" id="endDate" name="endDate" class="form-control"
+                               value="@(Model.EndDate?.ToString("yyyy-MM-dd"))">
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-2" id="employeeFilterRow"
+                     style="@(Model.ReportType == "individual" ? "" : "display: none;")">
+                    <div class="col-md-6">
+                        <label for="employeeId" class="form-label">Employee</label>
+                        <select id="employeeId" name="employeeId" class="form-select">
+                            <option value="">Select Employee</option>
+                            @foreach (var employee in Model.Employees)
+                            {
+                                @if (Model.EmployeeId.ToString() == employee.Id.ToString())
+                                {
+                                    <option value="@employee.Id" selected>@employee.FirstName @employee.LastName</option>
+                                }
+                                else
+                                {
+                                    <option value="@employee.Id">@employee.FirstName @employee.LastName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="includeDetails" class="form-label">Include Details</label>
+                        <div class="form-check mt-2">
+                            <input type="checkbox" id="includeDetails" name="includeDetails" class="form-check-input"
+                            @(Model.IncludeDetails ? "checked" : "")>
+                            <label class="form-check-label" for="includeDetails">Show Daily Entries</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-filter"></i> Generate Report
+                        </button>
+                        <button type="button" id="clearFiltersBtn" class="btn btn-outline-secondary ms-2">
+                            <i class="fas fa-eraser"></i> Clear Filters
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.HasData)
+    {
+        <!-- Report Summary Card -->
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Report Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="summary-stat-card mb-3">
+                            <h6 class="text-muted">Total Hours</h6>
+                            <h3 class="mb-0">@Model.TotalHours.ToString("F1")</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="summary-stat-card mb-3">
+                            <h6 class="text-muted">Regular Hours</h6>
+                            <h3 class="mb-0">@Model.RegularHours.ToString("F1")</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="summary-stat-card mb-3">
+                            <h6 class="text-muted">Overtime Hours</h6>
+                            <h3 class="mb-0">@Model.OvertimeHours.ToString("F1")</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="summary-stat-card mb-3">
+                            <h6 class="text-muted">Days Worked</h6>
+                            <h3 class="mb-0">@Model.DaysWorked</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Chart -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="chart-container"
+                             style="position: relative; height: 300px;"
+                             data-labels="@Json.Serialize(Model.ChartLabels)"
+                             data-regular-hours="@Json.Serialize(Model.ChartRegularHours)"
+                             data-overtime-hours="@Json.Serialize(Model.ChartOvertimeHours)">
+                            <canvas id="reportChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Data Table -->
+        <div class="card mb-4">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Report Details</h5>
+                <input type="text" id="searchReportData" class="form-control form-control-sm"
+                       style="width: 200px;" placeholder="Search...">
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="reportTable">
+                        <thead class="table-light">
+                            @if (Model.ReportType == "individual")
+                            {
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Clock In</th>
+                                    <th>Clock Out</th>
+                                    <th>Regular Hours</th>
+                                    <th>Overtime Hours</th>
+                                    <th>Description</th>
+                                    <th>Notes</th>
+                                </tr>
+                            }
+                            else if (Model.ReportType == "overtime")
+                            {
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Week</th>
+                                    <th>Overtime Hours</th>
+                                    <th>Overtime Cost</th>
+                                </tr>
+                            }
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ReportData)
+                            {
+                                @if (Model.ReportType == "individual")
+                                {
+                                    <tr>
+                                        <td>@item.Date.ToString("MM/dd/yyyy")</td>
+                                        <td>@item.ClockIn.ToString("hh:mm tt")</td>
+                                        <td>@item.ClockOut.ToString("hh:mm tt")</td>
+                                        <td>@item.RegularHours.ToString("F1")</td>
+                                        <td>@item.OvertimeHours.ToString("F1")</td>
+                                        <td>@item.Description</td>
+                                        <td>@item.Notes</td>
+                                    </tr>
+                                }
+                                else if (Model.ReportType == "overtime")
+                                {
+                                    <tr>
+                                        <td>@item.EmployeeName</td>
+                                        <td>@item.WeekLabel</td>
+                                        <td>@item.OvertimeHours.ToString("F1")</td>
+                                        <td>@item.OvertimeCost.ToString("C")</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- No Data Message -->
+        <div class="card mb-4">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-chart-bar fa-4x text-muted mb-3"></i>
+                <h4>No Report Data Available</h4>
+                <p class="text-muted">Adjust the filters above and click "Generate Report" to see data.</p>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Export Options Modal -->
+<div class="modal fade" id="exportOptionsModal" tabindex="-1" aria-labelledby="exportOptionsModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportOptionsModalLabel">Export Options</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="exportFormat" class="form-label">Export Format</label>
+                        <select id="exportFormat" class="form-select">
+                            <option value="excel">Excel (.xlsx)</option>
+                            <option value="csv">CSV (.csv)</option>
+                            <option value="pdf">PDF (.pdf)</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input type="checkbox" id="includeCharts" class="form-check-input" checked>
+                            <label class="form-check-label" for="includeCharts">Include Charts</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input type="checkbox" id="includeSummary" class="form-check-input" checked>
+                            <label class="form-check-label" for="includeSummary">Include Summary</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmExportBtn">Export</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="~/js/reports.js" asp-append-version="true"></script>
+}

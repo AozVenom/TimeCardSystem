@@ -12,7 +12,7 @@ namespace TimeCardSystem.Core.Models
 
         [Required]
         [StringLength(450)] // Recommended for foreign key strings
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
         [Required]
         public DateTime ShiftStart { get; set; }
@@ -42,7 +42,7 @@ namespace TimeCardSystem.Core.Models
 
         [Required]
         [StringLength(450)] // Recommended for foreign key strings
-        public string CreatedById { get; set; }
+        public string CreatedById { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? ModifiedAt { get; set; }

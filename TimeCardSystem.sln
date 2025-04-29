@@ -51,6 +51,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ScreenShots", "ScreenShots"
 		..\..\..\Desktop\TIMECARD SCREENSHOTS\SwaggerAPI Endpoints.PNG = ..\..\..\Desktop\TIMECARD SCREENSHOTS\SwaggerAPI Endpoints.PNG
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{6410CA85-DC2D-4DD0-8A48-A387F05ED588}"
+	ProjectSection(SolutionItems) = preProject
+		CustomAssemblyLoadContext.cs = CustomAssemblyLoadContext.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

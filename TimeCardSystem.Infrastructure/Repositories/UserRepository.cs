@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TimeCardSystem.Core.Interfaces;
 using TimeCardSystem.Core.Models;
@@ -11,11 +13,20 @@ namespace TimeCardSystem.Infrastructure.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly IEmployeeIdService _employeeIdService;
 
-        public UserRepository(ApplicationDbContext context)
+        public UserRepository(
+            ApplicationDbContext context,
+            UserManager<User> userManager,
+            IEmployeeIdService employeeIdService)
         {
             _context = context;
+            _userManager = userManager;
+            _employeeIdService = employeeIdService;
         }
+
+        // Existing methods
 
         public async Task<User> GetByIdAsync(string id)
         {
@@ -35,6 +46,9 @@ namespace TimeCardSystem.Infrastructure.Repositories
 
         public async Task<User> AddAsync(User user)
         {
+            // Generate an EmployeeId for the new user
+            user.EmployeeId = await _employeeIdService.GenerateEmployeeIdForUserAsync(user);
+
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return user;
@@ -66,6 +80,73 @@ namespace TimeCardSystem.Infrastructure.Repositories
             return await _context.Users
                 .Where(u => u.Role == UserRole.Employee)
                 .ToListAsync();
+        }
+
+        // New methods for EmployeeId support
+
+        /// <summary>
+        /// Gets a user by their employee ID
+        /// </summary>
+        public async Task<User> GetByEmployeeIdAsync(int employeeId)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
+        }
+
+        /// <summary>
+        /// Gets the UserId string from an EmployeeId
+        /// </summary>
+        public async Task<string> GetUserIdFromEmployeeIdAsync(int employeeId)
+        {
+            var user = await GetByEmployeeIdAsync(employeeId);
+            return user?.Id;
+        }
+
+        /// <summary>
+        /// Gets the EmployeeId from a UserId string
+        /// </summary>
+        public async Task<int?> GetEmployeeIdFromUserIdAsync(string userId)
+        {
+            var user = await _context.Users
+                .Where(u => u.Id == userId)
+                .Select(u => u.EmployeeId)
+                .FirstOrDefaultAsync();
+
+            return user != 0 ? user : null;
+        }
+
+        /// <summary>
+        /// Create a new user with Identity and an automatically assigned EmployeeId
+        /// </summary>
+        public async Task<User> CreateUserAsync(User user, string password)
+        {
+            // Generate an EmployeeId for the new user
+            user.EmployeeId = await _employeeIdService.GenerateEmployeeIdForUserAsync(user);
+
+            // Create the user with Identity
+            var result = await _userManager.CreateAsync(user, password);
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException(
+                    $"Failed to create user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            }
+
+            return user;
+        }
+
+        /// <summary>
+        /// Validate that the EmployeeId is unique
+        /// </summary>
+        public async Task<bool> IsEmployeeIdUniqueAsync(int employeeId, string excludeUserId = null)
+        {
+            if (string.IsNullOrEmpty(excludeUserId))
+            {
+                return !await _context.Users.AnyAsync(u => u.EmployeeId == employeeId);
+            }
+            else
+            {
+                return !await _context.Users.AnyAsync(u => u.EmployeeId == employeeId && u.Id != excludeUserId);
+            }
         }
     }
 }

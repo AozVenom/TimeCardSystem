@@ -1,4 +1,3 @@
-// Program.cs
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +10,11 @@ using TimeCardSystem.Infrastructure.Repositories;
 using TimeCardSystem.Infrastructure.Services;
 using TimeCardSystem.API.ExceptionHandling;
 using Microsoft.AspNetCore.Mvc;
+using TimeCardSystem.Core.Services;
+using DinkToPdf.Contracts;
+using DinkToPdf;
+using BaselineTypeDiscovery;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,6 +87,17 @@ builder.Services.AddCors(options =>
     );
 });
 
+// Add PDF conversion support
+try
+{
+    builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+    Console.WriteLine("PDF conversion service registered successfully");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error setting up PDF conversion: {ex.Message}");
+}
+
 // Add Controllers and API Explorer
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -93,6 +108,8 @@ builder.Services.AddScoped<ITimeEntryRepository, TimeEntryRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IEmployeeIdService, EmployeeIdService>();
 
 // Add global exception handling
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -106,11 +123,11 @@ try
     using (var scope = app.Services.CreateScope())
     {
         var services = scope.ServiceProvider;
-        var context = services.GetRequiredService<ApplicationDbContext>();
+        var dbContext = services.GetRequiredService<ApplicationDbContext>();
         var userManager = services.GetRequiredService<UserManager<User>>();
 
         // Ensure database is created and migrations are applied
-        await context.Database.MigrateAsync();
+        await dbContext.Database.MigrateAsync();
 
         // Seed initial data if no users exist
         if (!userManager.Users.Any())
@@ -158,6 +175,32 @@ else
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
+}
+
+try
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        var employeeIdService = services.GetRequiredService<IEmployeeIdService>();
+
+        logger.LogInformation("Generating EmployeeIds for existing users");
+
+        // Generate EmployeeIds for existing users
+        await employeeIdService.GenerateEmployeeIdsForExistingUsersAsync();
+
+        // Update TimeEntries with EmployeeIds
+        await employeeIdService.UpdateTimeEntriesWithEmployeeIdsAsync();
+
+        logger.LogInformation("EmployeeId generation completed successfully");
+    }
+}
+catch (Exception ex)
+{
+    // Log critical initialization errors
+    Console.WriteLine($"Critical error during EmployeeId generation: {ex.Message}");
+    Console.WriteLine($"Stack Trace: {ex.StackTrace}");
 }
 
 app.UseHttpsRedirection();
